@@ -1,5 +1,5 @@
-# talashnet-monolithic
-an monolithic web app to provide PaaS
+# PROJECT_NAME
+Project description
 
 ## Installation
 
