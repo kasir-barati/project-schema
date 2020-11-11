@@ -9,7 +9,7 @@ const express = require('express');
 const Logger = require('./utils/logger');
 const logger = new Logger('initalize-app');
 
-require('./configs/unhandled-errors').configure(logger, require('./utils/mail'));
+require('./configs/unhandled-errors')(logger, require('./services/mail'));
 
 const app = express();
 
