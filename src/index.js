@@ -3,9 +3,7 @@ require('./configs/unhandled-errors').config();
 
 const { logger } = require('./common/log');
 // Seeders
-const {
-    insert: insertTicketDepartment,
-} = require('./seeders/ticket-departments');
+const { insert: insertSeeder } = require('./seeders');
 
 // dummy data
 const { insertDummy } = require('./dummy-data/index');
@@ -15,7 +13,7 @@ const mongodbConfig = require('./configs/mongodb');
 
 mongodbConfig
     .connect()
-    .then(() => insertTicketDepartment())
+    .then(() => insertSeeder())
     .then(() => insertDummy())
     .then(() => {
         return expressApp.listen().catch((error) => {

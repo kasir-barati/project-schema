@@ -1,5 +1,5 @@
 // @ts-check
-const { insert: insertTest } = require('./test');
+const { insert: insertTest } = require('./test.seeder');
 
 /**
  * @returns {Promise<void>}
