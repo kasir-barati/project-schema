@@ -14,6 +14,8 @@ services:
     build:
       context: .
       dockerfile: dev.Dockerfile
+    depends_on:
+      - mongo
     volumes:
       - type: bind
         source: .
@@ -29,7 +31,7 @@ services:
     env_file:
       - ./.env
     ports:
-      - "$MONGODB_EXPOSED_PORT:$MONGODB_PORT"
+      - "${MONGODB_EXPOSED_PORT}:27018"
     environment:
       - MONGODB_ROOT_PASSWORD=1234567890
       - MONGODB_ADVERTISED_HOSTNAME=mongo
