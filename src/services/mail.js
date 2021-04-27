@@ -1,3 +1,4 @@
+// @ts-check
 const nodemailer = require('nodemailer');
 
 // const _transporter = nodemailer.createTransport({
@@ -15,8 +16,8 @@ const _transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
         user: process.env.MAIL_USER,
-        pass: process.env.MAIL_PASS
-    }
+        pass: process.env.MAIL_PASS,
+    },
 });
 
 /**
@@ -29,10 +30,13 @@ const _transporter = nodemailer.createTransport({
  */
 module.exports.sendMail = (from, to, subject, html) => {
     return new Promise((resolve, reject) => {
-        _transporter.sendMail({ from, to, subject, html }, (error, info) => {
-            if (error) reject(error);
-            else resolve(info);
-            // info = { messageId, envlope, accepted, rejected, pending, response }
-        });
+        _transporter.sendMail(
+            { from, to, subject, html },
+            (error, info) => {
+                if (error) reject(error);
+                else resolve(info);
+                // info = { messageId, envlope, accepted, rejected, pending, response }
+            },
+        );
     });
 };

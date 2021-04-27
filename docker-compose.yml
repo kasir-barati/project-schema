@@ -1,0 +1,40 @@
+version: "3.7"
+
+services:
+  ticket-server:
+    image: registry.gitlab.com/salam-sakhteman/infiniti-ticket-server:latest-prod
+    hostname: ticket_server
+    container_name: ${APP_NAME}_server
+    restart: always
+    env_file:
+      - ./.env
+    ports:
+      - "${APP_EXPOSED_PORT}:${APP_PORT}"
+    volumes:
+      - infiniti_ticket_server_vol:/usr/src/app
+    networks:
+      - ticket_system_network
+    depends_on:
+      - mongo
+    environment:
+      - NODE_ENV=production
+
+  mongo:
+    image: bitnami/mongodb:4.4-debian-10
+    hostname: ${APP_NAME}_server
+    container_name: ${APP_NAME}_server
+    restart: always
+    volumes:
+      - mongo_inifiniti_ticket_vol:/bitnami/mongodb
+    env_file:
+      - ./.env.mongo
+    networks:
+      - ticket_system_network
+
+volumes:
+  - mongo_inifiniti_ticket_vol
+  - infiniti_ticket_server_vol:/usr/src/app
+
+networks:
+  ticket_system_network:
+    driver: bridge

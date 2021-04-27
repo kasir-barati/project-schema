@@ -1,0 +1,53 @@
+version: "3.7"
+
+services:
+  server:
+    image: node:14.15.0
+    container_name: ${APP_NAME}-server
+    hostname: ${APP_NAME}-server
+    restart: always
+    ports:
+      - "${APP_EXPOSED_PORT}:${APP_PORT}"
+    env_file:
+      - ./.env
+      - ./.env.mongo
+    build:
+      context: .
+      dockerfile: dev.Dockerfile
+    volumes:
+      - type: bind
+        source: .
+        target: /usr/src/app
+        volume:
+          nocopy: true
+
+  mongo:
+    image: bitnami/mongodb:4.4-debian-10
+    container_name: test_mongoose_db
+    hostname: $APP_NAME
+    restart: always
+    env_file:
+      - ./.env
+    ports:
+      - "$MONGODB_EXPOSED_PORT:$MONGODB_PORT"
+    environment:
+      - MONGODB_ROOT_PASSWORD=1234567890
+      - MONGODB_ADVERTISED_HOSTNAME=mongo
+
+  mongo-express:
+    image: mongo-express:0.54.0
+    container_name: test_mongoose_mongo_compass
+    restart: always
+    ports:
+      - 8081:8081
+    depends_on:
+      - mongo
+    environment:
+      - ME_CONFIG_BASICAUTH_USERNAME=admin
+      - ME_CONFIG_BASICAUTH_PASSWORD=123456
+      - ME_CONFIG_MONGODB_ENABLE_ADMIN="false"
+      - ME_CONFIG_MONGODB_PORT=$MONGODB_PORT
+      - ME_CONFIG_MONGODB_SERVER=mongo
+      - ME_CONFIG_MONGODB_AUTH_USERNAME=$MONGODB_USERNAME
+      - ME_CONFIG_MONGODB_AUTH_PASSWORD=$MONGODB_PASSWORD
+      - ME_CONFIG_MONGODB_AUTH_DATABASE=$MONGODB_DATABASE

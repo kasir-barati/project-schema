@@ -1,15 +1,35 @@
-const Logger = require('../utils/logger');
-const logger = new Logger('middleware-logger');
+// @ts-check
+const { logger } = require('../common/log');
 
-module.exports = (req, res, next) => {
-    logger.info('middleware logging', {
-        meta: {
-            "ip": req.ip,
-            "body": req.body,
-            "method": req.method,
-            "headers": req.headers,
-            "originalUrl": req.originalUrl,
+/**
+ *
+ * @param {'info'|'route'|'warn'|'error'} level
+ * @param {string} scope
+ * @param {string} message
+ */
+function loggerMiddleware(level, scope, message) {
+    /**@type {import('express').RequestHandler} */
+    return (req, res, next) => {
+        switch (level) {
+            case 'error':
+                logger('error', 'route', {
+                    message: `${message}. ${scope}`,
+                });
+                break;
+            case 'info':
+            case 'route':
+                logger('info', 'route', {
+                    message: `${message}. ${scope}`,
+                });
+                break;
+            case 'warn':
+                logger('warning', 'route', {
+                    message: `${message}. ${scope}`,
+                });
+                break;
         }
-    });
-    next();
-};
+        next();
+    };
+}
+
+module.exports = { loggerMiddleware };

@@ -1,0 +1,29 @@
+image: docker:latest
+
+stages:
+  - staging
+  - production
+
+services:
+  - docker:dind
+
+before_script:
+  - docker login -u gitlab-ci-token -p $ $CI_JOB_TOKEN $CI_REGISTERY
+  - export IMAGE_TAG=latest
+  - export IMAGE_INTEGRATION_TAG=v1
+
+staging:
+  stage: staging
+  script:
+    - docker build -t ${CI_REGISTERY_IMAGE}:${IMAGE_TAG}-staging .
+    - docker push ${CI_REGISTERY_IMAGE}:${IMAGE_TAG}
+  only:
+    - release
+
+production:
+  stage: production
+  script:
+    - docker build -t ${CI_REGISTERY_IMAGE}:${IMAGE_TAG}-prod .
+    - docker push ${CI_REGISTERY_IMAGE}:${IMAGE_TAG}-prod
+  only:
+    - master

@@ -1,39 +1,58 @@
-const path = require('path');
-
-require('dotenv').config({
-    path: path.join(__dirname, '..', '.env')
-});
-
+// @ts-check
 const express = require('express');
 
-const Logger = require('./utils/logger');
-const logger = new Logger('initalize-app');
+const { router: testRouter } = require('./routers/test');
 
-require('./configs/unhandled-errors')(logger, require('./services/mail'));
+const {
+    unexpectedErrors,
+} = require('./middlewares/unexpected-errors');
+const {
+    expectedErrors: validationErrors,
+} = require('./middlewares/expected-errors/422');
+const {
+    expectedErrors: authorizationErrors,
+} = require('./middlewares/expected-errors/403');
+const {
+    expectedErrors: authenticationErrors,
+} = require('./middlewares/expected-errors/401');
+const {
+    expectedErrors: invalidJsonErrors,
+} = require('./middlewares/expected-errors/400');
+const {
+    expectedErrors: documentNotFoundErrors,
+} = require('./middlewares/expected-errors/404');
+const {
+    endpointNotFound,
+} = require('./middlewares/endpoint-not-found');
+
+const {
+    envs: { expressApp },
+} = require('./configs/env');
 
 const app = express();
 
-const NODE_ENV = process.env.NODE_ENV;
-const APP_PORT = process.env.APP_PORT;
-const APP_HOST = process.env.APP_HOST;
-
-app.use(require('cors')());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname, '..', 'public')));
 
-app.use(require('./middlewares/logger'));
-app.use(require('./middlewares/404'));
-app.use(require('./middlewares/send-response'));
-app.use(require('./middlewares/500'));
+app.use(testRouter);
 
-app.listen(APP_PORT, APP_HOST, error => {
-    if (error) throw error;
-    else {
-        require('./configs/mongodb').connect(logger);
-        require('./configs/sequelize').getSequelize().sync({ force: true })
-        logger.info(`Server is up & running on ${NODE_ENV} mode. http://${APP_HOST}:${APP_PORT}`)
-    };
-});
+app.use(endpointNotFound);
+app.use(validationErrors);
+app.use(authorizationErrors);
+app.use(authenticationErrors);
+app.use(documentNotFoundErrors);
+app.use(invalidJsonErrors);
+app.use(unexpectedErrors);
 
-module.exports = app;
+function listen() {
+    return new Promise((resolve, reject) => {
+        app.listen(Number(expressApp.port), expressApp.host, () => {
+            resolve(expressApp.port);
+        }).on('error', reject);
+    });
+}
+
+module.exports = {
+    app,
+    listen,
+};

@@ -1,0 +1,3 @@
+interface IType {}
+
+export { IType };
