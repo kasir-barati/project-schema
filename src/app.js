@@ -1,7 +1,7 @@
 // @ts-check
 const express = require('express');
 
-const { router: testRouter } = require('./routers/test');
+const { router: testRouter } = require('./routers/test.router');
 
 const {
     unexpectedErrors,
