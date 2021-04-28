@@ -1,4 +1,7 @@
 {
+    "bracketSpacing": true,
+    "endOfLine": "lf",
+    "quoteProps": "consistent",
     "tabWidth": 4,
     "useTabs": false,
     "singleQuote": true,
