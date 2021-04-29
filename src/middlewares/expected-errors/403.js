@@ -4,7 +4,7 @@ const { errorMessageGenerator } = require('../validator');
 const { UnauthorizedAccess } = require('../../common/error-response');
 
 const {
-    envs: { common: commonConfigs },
+    envs: { common: commonEnvs },
 } = require('../../configs/env');
 
 /**@type {import('express').ErrorRequestHandler} */
@@ -28,7 +28,7 @@ function expectedErrors(error, req, res, next) {
         ),
     };
 
-    if (commonConfigs.nodeEnv === 'development') {
+    if (commonEnvs.nodeEnv === 'development') {
         response.debug = {
             ...error,
         };

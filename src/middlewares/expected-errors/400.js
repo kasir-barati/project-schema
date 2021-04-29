@@ -4,7 +4,7 @@ const _ = require('lodash');
 const { logger } = require('../../common/log');
 
 const {
-    envs: { common: commonConfigs },
+    envs: { common: commonEnvs },
 } = require('../../configs/env');
 
 // if express.json throws any error or the JSON.parse throws error we catch it here
@@ -35,7 +35,7 @@ function expectedErrors(error, req, res, next) {
         message: 'BAD_REQUEST',
     };
 
-    if (commonConfigs.nodeEnv === 'development') {
+    if (commonEnvs.nodeEnv === 'development') {
         response.debug = {
             ...error,
         };

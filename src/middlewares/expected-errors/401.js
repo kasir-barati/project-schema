@@ -4,7 +4,7 @@ const { logger } = require('../../common/log');
 const { errorMessageGenerator } = require('../validator');
 
 const {
-    envs: { common: commonConfigs },
+    envs: { common: commonEnvs },
 } = require('../../configs/env');
 
 /**@type {import('express').ErrorRequestHandler} */
@@ -25,7 +25,7 @@ function expectedErrors(error, req, res, next) {
         message: errorMessageGenerator('authentication', 'required'),
     };
 
-    if (commonConfigs.nodeEnv === 'development') {
+    if (commonEnvs.nodeEnv === 'development') {
         response.debug = {
             ...error,
         };

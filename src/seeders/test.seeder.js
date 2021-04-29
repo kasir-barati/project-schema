@@ -2,7 +2,7 @@
 // Import models or repositories
 
 const {
-    envs: { common: commonConfig, seederData },
+    envs: { common: commonEnvs, seederData },
 } = require('../configs/env');
 
 /**
@@ -10,7 +10,7 @@ const {
  * @returns {Promise<void>}
  */
 async function insert() {
-    if (commonConfig.nodeEnv === 'development') {
+    if (commonEnvs.nodeEnv === 'development') {
         // insert some dummy data
     }
 }
