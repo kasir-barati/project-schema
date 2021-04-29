@@ -7,6 +7,9 @@ const {
     unexpectedErrors,
 } = require('./middlewares/unexpected-errors');
 const {
+    expectedErrors: mongoDbErrors,
+} = require('./middlewares/expected-errors/mongo-errors');
+const {
     expectedErrors: validationErrors,
 } = require('./middlewares/expected-errors/422');
 const {
@@ -41,6 +44,7 @@ app.use(validationErrors);
 app.use(authorizationErrors);
 app.use(authenticationErrors);
 app.use(documentNotFoundErrors);
+app.use(mongoDbErrors);
 app.use(invalidJsonErrors);
 app.use(unexpectedErrors);
 
