@@ -1,3 +1,4 @@
+// @ts-check
 /**
  *
  * @param {string} string
@@ -6,7 +7,7 @@
 function persianNumberToEnglish(string) {
     string = String(string);
     return string?.replace(/[۰-۹]/g, (digit) =>
-        '۰۱۲۳۴۵۶۷۸۹'.indexOf(digit),
+        String('۰۱۲۳۴۵۶۷۸۹'.indexOf(digit)),
     );
 }
 
@@ -18,7 +19,7 @@ function persianNumberToEnglish(string) {
 function arabicNumberToEnglish(string) {
     string = String(string);
     return string?.replace(/[٠-٩]/g, (digit) =>
-        '٠١٢٣٤٥٦٧٨٩'.indexOf(digit),
+        String('٠١٢٣٤٥٦٧٨٩'.indexOf(digit)),
     );
 }
 
