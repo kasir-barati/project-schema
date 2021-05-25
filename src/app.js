@@ -4,31 +4,6 @@ const express = require('express');
 const { router: testRouter } = require('./routers/test.router');
 
 const {
-    unexpectedErrors,
-} = require('./middlewares/unexpected-errors');
-const {
-    expectedErrors: mongoDbErrors,
-} = require('./middlewares/expected-errors/mongo-errors');
-const {
-    expectedErrors: validationErrors,
-} = require('./middlewares/expected-errors/422');
-const {
-    expectedErrors: authorizationErrors,
-} = require('./middlewares/expected-errors/403');
-const {
-    expectedErrors: authenticationErrors,
-} = require('./middlewares/expected-errors/401');
-const {
-    expectedErrors: invalidJsonErrors,
-} = require('./middlewares/expected-errors/400');
-const {
-    expectedErrors: documentNotFoundErrors,
-} = require('./middlewares/expected-errors/404');
-const {
-    endpointNotFound,
-} = require('./middlewares/endpoint-not-found');
-
-const {
     envs: { expressApp },
 } = require('./configs/env');
 
@@ -39,14 +14,17 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use(testRouter);
 
-app.use(endpointNotFound);
-app.use(validationErrors);
-app.use(authorizationErrors);
-app.use(authenticationErrors);
-app.use(documentNotFoundErrors);
-app.use(mongoDbErrors);
-app.use(invalidJsonErrors);
-app.use(unexpectedErrors);
+app.use(require('./middlewares/endpoint-not-found').endpointNotFound);
+app.use(require('./middlewares/expected-errors/422').expectedErrors);
+app.use(require('./middlewares/expected-errors/403').expectedErrors);
+app.use(require('./middlewares/expected-errors/401').expectedErrors);
+app.use(require('./middlewares/expected-errors/404').expectedErrors);
+app.use(
+    require('./middlewares/expected-errors/mongo-errors')
+        .expectedErrors,
+);
+app.use(require('./middlewares/expected-errors/400').expectedErrors);
+app.use(require('./middlewares/unexpected-errors').unexpectedErrors);
 
 function listen() {
     return new Promise((resolve, reject) => {
