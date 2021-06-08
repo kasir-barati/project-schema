@@ -1,7 +1,9 @@
+import { authConfigs } from './types/auth.type';
+
 function authConfigsGenerator(): { authConfigs } | never {
-    const authConfigs = {
+    const authConfigs: { authConfigs: authConfigs } = {
         authConfigs: {
-            userSeret: process.env?.JWT_USER_SECRET,
+            userSecret: process.env?.JWT_USER_SECRET,
             adminSecret: process.env?.JWT_USER_SECRET,
         },
     };

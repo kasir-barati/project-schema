@@ -1,5 +1,5 @@
 interface authConfigs {
-    userSeret: string;
+    userSecret: string;
     adminSecret: string;
 }
 

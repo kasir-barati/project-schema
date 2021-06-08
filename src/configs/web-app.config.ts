@@ -1,4 +1,8 @@
-function webAppConfigsGenerator(): { webAppConfigs } | never {
+import { webAppConfigs } from './types/web.type';
+
+function webAppConfigsGenerator():
+    | { webAppConfigs: webAppConfigs }
+    | never {
     const webAppConfigs = {
         webAppConfigs: {
             nodeEnv: process.env?.NODE_ENV ?? 'development',
