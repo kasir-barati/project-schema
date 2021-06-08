@@ -9,6 +9,11 @@ import { JwtStrategy } from './strategies/jwt.strategy';
 
 @Module({
     imports: [
+        // PassportModule.registerAsync({
+        //     useFactory: () => ({
+        //         defaultStrategy: 'jwt',
+        //     }),
+        // }),
         PassportModule.register({
             defaultStrategy: 'jwt',
         }),
@@ -28,6 +33,7 @@ import { JwtStrategy } from './strategies/jwt.strategy';
         }),
     ],
     providers: [AuthService, ConfigService, JwtStrategy],
+    // exports: [AuthService],
 })
 class AuthModule {}
 

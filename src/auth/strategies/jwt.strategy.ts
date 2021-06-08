@@ -7,6 +7,7 @@ import { authConfigs } from '../../configs/types/auth.type';
 import { DecodedAdmin, DecodedUser } from '../types/decoded-jwt.type';
 
 @Injectable()
+// class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
 class JwtStrategy extends PassportStrategy(Strategy) {
     constructor(configService: ConfigService) {
         const { adminSecret } = configService.get<authConfigs>(
