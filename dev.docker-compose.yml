@@ -1,0 +1,47 @@
+version: "3.7"
+
+services:
+  web-app:
+    image: $APP_NAME:latest
+    build:
+      context: .
+      dockerfile: ./dev.Dockerfile
+    ports:
+      - $APP_EXPOSED_PORT:$APP_PORT
+    hostname: web-app
+    restart: always
+    container_name: ${APP_NAME}
+    env_file:
+      - ./.env
+      - ./.env.mongo
+    volumes:
+      - type: bind
+        target: /usr/src/app
+        source: .
+        volume:
+          nocopy: true
+    networks:
+      - rabi-network
+    environment:
+      - MONGODB_HOST=mongo
+
+  mongo:
+    image: bitnami/mongodb:4.4-debian-10
+    container_name: rabi-database
+    hostname: mongo
+    restart: always
+    env_file:
+      - ./.env.mongo
+    ports:
+      - 27018:27017
+    volumes:
+      - ticketing-mongo-volume:/bitnami/mongodb
+    networks:
+      - rabi-network
+
+volumes:
+  ticketing-mongo-volume:
+
+networks:
+  rabi-network:
+    driver: bridge
