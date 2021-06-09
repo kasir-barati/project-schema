@@ -1,7 +1,7 @@
-import { IsEmpty, IsString } from 'class-validator';
+import { IsEmpty, IsNotEmpty, IsString } from 'class-validator';
 
 class CreateTestDto {
-    @IsEmpty({
+    @IsNotEmpty({
         message: 'EMPTY_NAME',
     })
     @IsString({
