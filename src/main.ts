@@ -14,7 +14,11 @@ async function bootstrap() {
     const { corsConfigs } = corsConfigsGenerator();
 
     app.useGlobalPipes(
-        new ValidationPipe({ transform: true, whitelist: true }),
+        new ValidationPipe({
+            transform: true,
+            whitelist: true,
+            errorHttpStatusCode: 422,
+        }),
     );
     app.enableCors(corsConfigs);
     app.use(cookieParser());
