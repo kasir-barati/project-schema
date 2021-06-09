@@ -7,11 +7,15 @@ import { AppModule } from './app.module';
 import { csrf as csrfErrorHandler } from './middlewares/errors/csrf.middleware';
 import { csrf } from './middlewares/general/csrf.middleware';
 import { corsConfigsGenerator } from './configs/cors.config';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
     const { corsConfigs } = corsConfigsGenerator();
 
+    app.useGlobalPipes(
+        new ValidationPipe({ transform: true, whitelist: true }),
+    );
     app.enableCors(corsConfigs);
     app.use(cookieParser());
     app.use(helmet());
