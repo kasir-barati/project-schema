@@ -1,25 +1,23 @@
+import { ConfigService } from '@nestjs/config';
 import * as cookieParser from 'cookie-parser';
 import { NestFactory } from '@nestjs/core';
 import * as helmet from 'helmet';
 import * as csurf from 'csurf';
 
-import { AppModule } from './app.module';
 import { csrf as csrfErrorHandler } from './middlewares/errors/csrf.middleware';
-import { csrf } from './middlewares/general/csrf.middleware';
 import { corsConfigsGenerator } from './configs/cors.config';
-import { ValidationPipe } from '@nestjs/common';
+import { csrf } from './middlewares/general/csrf.middleware';
+import { webAppConfigs } from './configs/types/web.type';
+import { AppModule } from './app.module';
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
     const { corsConfigs } = corsConfigsGenerator();
-
-    app.useGlobalPipes(
-        new ValidationPipe({
-            transform: true,
-            whitelist: true,
-            errorHttpStatusCode: 422,
-        }),
+    const configService = app.get(ConfigService);
+    const appConfigs = configService.get<webAppConfigs>(
+        'webAppConfigs',
     );
+
     app.enableCors(corsConfigs);
     app.use(cookieParser());
     app.use(helmet());
@@ -32,6 +30,7 @@ async function bootstrap() {
     app.use(csrf);
     // app.use(csurf({ cookie: true })); FIXME: does not work, but i still do not know why
     app.use(csrfErrorHandler);
-    await app.listen(3000);
+    // TODO: log the app connection info via winston
+    await app.listen(appConfigs.port);
 }
 bootstrap();
