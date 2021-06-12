@@ -1,23 +1,31 @@
 import {
-    Controller,
     Get,
     Post,
     Body,
     Patch,
     Param,
+    Inject,
     Delete,
-    UseGuards,
     UsePipes,
+    UseGuards,
+    Controller,
     ValidationPipe,
 } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
+import { Logger } from 'winston';
+
 import { TestService } from './test.service';
 import { CreateTestDto } from './dto/create-test.dto';
 import { UpdateTestDto } from './dto/update-test.dto';
-import { AuthGuard } from '@nestjs/passport';
 
 @Controller('test')
 export class TestController {
-    constructor(private readonly testService: TestService) {}
+    constructor(
+        private readonly testService: TestService,
+        @Inject(WINSTON_MODULE_PROVIDER)
+        private readonly logger: Logger,
+    ) {}
 
     @Post()
     @UsePipes(ValidationPipe)
