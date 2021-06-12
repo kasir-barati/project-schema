@@ -14,6 +14,13 @@ function winstonConfigsGenerator():
                     nestWinstonModuleUtilities.format.nestLike(),
                 ),
             }),
+            new winston.transports.File({
+                format: winston.format.combine(
+                    winston.format.timestamp(),
+                    nestWinstonModuleUtilities.format.nestLike(),
+                ),
+                filename: 'app.log',
+            }),
         ],
     };
     return {
