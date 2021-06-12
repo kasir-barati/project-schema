@@ -1,3 +1,4 @@
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { ConfigService } from '@nestjs/config';
 import * as cookieParser from 'cookie-parser';
 import { NestFactory } from '@nestjs/core';
@@ -14,10 +15,12 @@ async function bootstrap() {
     const app = await NestFactory.create(AppModule);
     const { corsConfigs } = corsConfigsGenerator();
     const configService = app.get(ConfigService);
+    const nestWinston = app.get(WINSTON_MODULE_NEST_PROVIDER);
     const appConfigs = configService.get<webAppConfigs>(
         'webAppConfigs',
     );
 
+    app.useLogger(nestWinston);
     app.enableCors(corsConfigs);
     app.use(cookieParser());
     app.use(helmet());
