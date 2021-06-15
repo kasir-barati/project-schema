@@ -1,0 +1,39 @@
+before_script:
+  - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+  - export IMAGE_TAG=latest
+  - export IMAGE_INTEGRATION_TAG=v1
+
+stages:
+  - lint
+  - build-test-image
+  - build-prod-image
+
+services:
+  - docker:20.10.7-dind
+
+eslint-stage:
+  image: node:14.15.0
+  stage: lint
+  before_script:
+    - ""
+  script:
+    - npm ci
+    - npm run lint
+
+test-stage:
+  image: docker:20.10.7
+  stage: build-test-image
+  script:
+    - docker build -t ${CI_REGISTRY_IMAGE}:${IMAGE_TAG}-staging .
+    - docker push ${CI_REGISTRY_IMAGE}:${IMAGE_TAG}-staging
+  only:
+    - release
+
+prod-stage:
+  image: docker:20.10.7
+  stage: build-prod-image
+  script:
+    - docker build -t ${CI_REGISTRY_IMAGE}:${IMAGE_TAG}-staging .
+    - docker push ${CI_REGISTRY_IMAGE}:${IMAGE_TAG}-staging
+  only:
+    - main
