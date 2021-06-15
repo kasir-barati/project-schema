@@ -1,13 +1,31 @@
-import { IsEmpty, IsNotEmpty, IsString } from 'class-validator';
+import { Type } from 'class-transformer';
+import {
+    IsObject,
+    IsOptional,
+    IsString,
+    ValidateNested,
+} from 'class-validator';
+
+import { OtherActionsForForm } from '../types/other-action-for-form.type';
 
 class CreateTestDto {
-    @IsNotEmpty({
-        message: 'EMPTY_NAME',
-    })
+    @IsOptional()
     @IsString({
-        message: 'FORMAT_NAME',
+        message: 'FORMAT_FORM_NAME',
     })
-    name: string;
+    formName: string;
+
+    @IsOptional()
+    @IsObject({
+        each: true,
+        message: 'FORMAT_FORM_BUILDER',
+    })
+    formBuilder: Record<string, unknown[]>;
+
+    @IsOptional()
+    @ValidateNested()
+    @Type(() => OtherActionsForForm)
+    otherActionsForForm: OtherActionsForForm;
 }
 
 export { CreateTestDto };
