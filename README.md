@@ -15,4 +15,6 @@
 4. fix the environmetal variables in the _.env_ and _.env.mongo_ files
 5. `docker-compose -f dev.docker-compose.yml up`
 
-##
+## Notes
+
+-   we are using husky & lint, so if you have a lint error you have to fix it first then commit your changes
