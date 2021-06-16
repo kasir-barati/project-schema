@@ -8,6 +8,8 @@ describe('AppController', () => {
     });
 
     describe('tests', () => {
-        it('test', () => {});
+        it('test', () => {
+            console.log('testing');
+        });
     });
 });

@@ -1,7 +1,7 @@
 import { CorsOptions } from '@nestjs/common/interfaces/external/cors-options.interface';
 
 // allowedOrigins restrict requests from unusual source
-let allowedOrigins = [
+const allowedOrigins = [
     'http://localhost:3000',
     'http://localhost:3001',
     'http://localhost:3002',
@@ -30,7 +30,7 @@ function corsConfigsGenerator(): { corsConfigs } | never {
             // (like mobile apps or curl requests)
             if (!origin) return callback(null, true);
             if (allowedOrigins.indexOf(origin) === -1) {
-                var msg =
+                const msg =
                     'The CORS policy for this site does not ' +
                     'allow access from the specified Origin.';
                 return callback(new Error(msg), false);
