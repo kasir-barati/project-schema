@@ -28,6 +28,10 @@ function phoneNumberValidator(fieldName) {
     return strictValidatorChain(fieldName)
         .customSanitizer(arabicNumberToEnglish)
         .customSanitizer(persianNumberToEnglish)
+        .customSanitizer((phoneNumber, { req }) => {
+            req.phoneNumber = phoneNumber;
+            return Promise.resolve();
+        })
         .isNumeric()
         .withMessage(errorMessageGenerator(fieldName, 'is_not_number'))
         .bail();
