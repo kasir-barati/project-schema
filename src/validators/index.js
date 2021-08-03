@@ -5,6 +5,10 @@ const {
     mongoIdValidator,
     optionalValidatorChain,
 } = require('../middlewares/validator');
+const {
+    arabicNumberToEnglish,
+    persianNumberToEnglish,
+} = require('../common/custom-convertors');
 
 /**
  *
@@ -16,10 +20,24 @@ function testValidator(fieldName) {
         .withMessage(errorMessageGenerator(fieldName, 'is_no_array'));
 }
 
+/**
+ *
+ * @param {string} fieldName
+ */
+function phoneNumberValidator(fieldName) {
+    return strictValidatorChain(fieldName)
+        .customSanitizer(arabicNumberToEnglish)
+        .customSanitizer(persianNumberToEnglish)
+        .isNumeric()
+        .withMessage(errorMessageGenerator(fieldName, 'is_not_number'))
+        .bail();
+}
+
 module.exports = {
     /**@type {import('express').RequestHandler[]} */
     testValidator: [
         testValidator('test'),
         mongoIdValidator('userId'),
+        phoneNumberValidator('phoneNumber'),
     ],
 };
