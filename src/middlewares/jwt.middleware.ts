@@ -1,0 +1,60 @@
+import { NextFunction, Response, Request } from 'express';
+
+const jwt = require('../utils/jwt');
+const User = require('../models/user.model');
+const Role = require('../models/role');
+const Token = require('../models/token');
+const ErrorResponse = require('../utils/error-response');
+
+export async function isUser(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+) {
+    let authHeader = req.headers.authorization;
+
+    if (!authHeader)
+        return next(
+            new ErrorResponse(
+                'jwtError',
+                'Something went wrong in the user JWT middleware',
+                401,
+            ),
+        );
+
+    let token = authHeader.split(' ')[1];
+    let decoded = await jwt.verifyToken(token);
+    let user = await User.findByPk(decoded.sub);
+
+    if (!user)
+        return next(
+            new ErrorResponse(
+                'Unauthorized',
+                'You are not authorized.',
+                401,
+            ),
+        );
+
+    let role = await Role.findByPk(user.roleId);
+
+    if (role.accessLevel !== 4)
+        return next(
+            new ErrorResponse(
+                'Unauthorized',
+                'You are not authorized.',
+                401,
+            ),
+        );
+
+    if (!(await Token.findOne({ token })))
+        return next(
+            new ErrorResponse(
+                'Unauthorized',
+                'You are not authorized.',
+                401,
+            ),
+        );
+
+    req.userId = decoded.sub;
+    next();
+}
