@@ -14,8 +14,8 @@ import { mongodbConfigsGenerator } from './configs/mongodb.config';
 import { winstonConfigsGenerator } from './configs/winston.config';
 import { webAppConfigsGenerator } from './configs/web-app.config';
 import { authConfigsGenerator } from './configs/auth.config';
-import { TestModule } from './test/test.module';
-import { AuthModule } from './auth/auth.module';
+import { TestModule } from './modules/test/test.module';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
     imports: [

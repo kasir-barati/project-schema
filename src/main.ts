@@ -68,7 +68,9 @@ async function bootstrap() {
             document,
         );
     }
-
+    /**
+     * Config global validation pipeline, and Http exception filter to handle/catch errors
+     */
     app.useGlobalPipes(new ValidationPipe());
     app.useGlobalFilters(new HttpExceptionFilter(nestWinston));
 
