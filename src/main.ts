@@ -10,7 +10,7 @@ import * as csurf from 'csurf';
 import { csrf as csrfErrorHandler } from './common/middlewares/errors/csrf.middleware';
 import { corsConfigsGenerator } from './configs/cors.config';
 import { csrf } from './common/middlewares/general/csrf.middleware';
-import { NodeEnv, webAppConfigs } from './configs/types/web.type';
+import { NodeEnv, webAppConfigs } from './contracts/types/web.type';
 import { AppModule } from './app.module';
 import { morganMiddleware } from './common/middlewares/general/morgan.middleware';
 
@@ -25,8 +25,14 @@ async function bootstrap() {
         'webAppConfigs',
     );
 
+    /**
+     * Config morgan to use winston as a logger
+     */
     app.useLogger(nestWinston);
     app.use(morganMiddleware(nestWinston, appConfigs.nodeEnv));
+    /**
+     * Secure the RESTful API
+     */
     app.enableCors(corsConfigs);
     app.use(cookieParser());
     app.use(helmet());
@@ -40,6 +46,9 @@ async function bootstrap() {
     // app.use(csurf({ cookie: true })); FIXME: does not work, but i still do not know why
     app.use(csrfErrorHandler);
 
+    /**
+     * Config Swagger
+     */
     if (appConfigs.nodeEnv === NodeEnv.development) {
         const options = new DocumentBuilder()
             .setTitle('document-title')

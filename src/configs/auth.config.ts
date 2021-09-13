@@ -1,4 +1,4 @@
-import { authConfigs } from './types/auth.type';
+import { authConfigs } from '../contracts/types/auth.type';
 
 function authConfigsGenerator(): { authConfigs } | never {
     const authConfigs: { authConfigs: authConfigs } = {

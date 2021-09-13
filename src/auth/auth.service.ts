@@ -2,7 +2,7 @@ import { JwtService } from '@nestjs/jwt';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
-import { authConfigs } from '../configs/types/auth.type';
+import { authConfigs } from '../contracts/types/auth.type';
 import { DecodedAdmin, DecodedUser } from './types/decoded-jwt.type';
 
 type User = any;

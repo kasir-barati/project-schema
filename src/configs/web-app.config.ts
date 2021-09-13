@@ -1,4 +1,4 @@
-import { NodeEnv, webAppConfigs } from './types/web.type';
+import { NodeEnv, webAppConfigs } from '../contracts/types/web.type';
 
 function webAppConfigsGenerator():
     | { webAppConfigs: webAppConfigs }

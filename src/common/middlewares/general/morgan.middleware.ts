@@ -4,7 +4,7 @@ import * as morgan from 'morgan';
 
 type MorganOptions = morgan.Options<IncomingMessage, ServerResponse>;
 
-import { NodeEnv } from 'src/configs/types/web.type';
+import { NodeEnv } from 'src/contracts/types/web.type';
 
 export function morganMiddleware(
     logger: LoggerService,
