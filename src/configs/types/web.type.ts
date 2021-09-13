@@ -1,5 +1,9 @@
+export enum NodeEnv {
+    development = 'development',
+    production = 'production',
+}
 interface webAppConfigs {
-    nodeEnv: string;
+    nodeEnv: NodeEnv;
     sa: {
         username: string;
         password: string;
@@ -7,6 +11,7 @@ interface webAppConfigs {
     host: string;
     port: number;
     exposedPort: number;
+    swaggerRoute: string;
 }
 
 export { webAppConfigs };

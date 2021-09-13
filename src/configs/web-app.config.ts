@@ -1,11 +1,13 @@
-import { webAppConfigs } from './types/web.type';
+import { NodeEnv, webAppConfigs } from './types/web.type';
 
 function webAppConfigsGenerator():
     | { webAppConfigs: webAppConfigs }
     | never {
     const webAppConfigs = {
         webAppConfigs: {
-            nodeEnv: process.env?.NODE_ENV ?? 'development',
+            nodeEnv:
+                (process.env?.NODE_ENV as NodeEnv) ??
+                NodeEnv.development,
             sa: {
                 username: process.env?.SA_USERNAME,
                 password: process.env?.SA_PASSWORD,
@@ -14,6 +16,7 @@ function webAppConfigsGenerator():
             port: Number(process.env?.APP_PORT) ?? 3000,
             exposedPort:
                 Number(process.env?.APP_EXPOSED_PORT) ?? 5000,
+            swaggerRoute: process.env.SWAGGER_ROUTE,
         },
     };
     return webAppConfigs;

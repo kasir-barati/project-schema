@@ -1,4 +1,5 @@
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
 import * as cookieParser from 'cookie-parser';
 import { NestFactory } from '@nestjs/core';
@@ -8,7 +9,7 @@ import * as csurf from 'csurf';
 import { csrf as csrfErrorHandler } from './common/middlewares/errors/csrf.middleware';
 import { corsConfigsGenerator } from './configs/cors.config';
 import { csrf } from './common/middlewares/general/csrf.middleware';
-import { webAppConfigs } from './configs/types/web.type';
+import { NodeEnv, webAppConfigs } from './configs/types/web.type';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
@@ -33,7 +34,32 @@ async function bootstrap() {
     app.use(csrf);
     // app.use(csurf({ cookie: true })); FIXME: does not work, but i still do not know why
     app.use(csrfErrorHandler);
+
+    if (appConfigs.nodeEnv === NodeEnv.development) {
+        const options = new DocumentBuilder()
+            .setTitle('document-title')
+            .setDescription('A short description.')
+            .setVersion('1.0')
+            .addBearerAuth({
+                type: 'apiKey',
+                in: 'header',
+                name: 'authorization',
+            })
+            .build();
+        const document = SwaggerModule.createDocument(app, options);
+        SwaggerModule.setup(
+            configService.get('SWAGGER_ROUTE'),
+            app,
+            document,
+        );
+    }
+
     // TODO: log the app connection info via winston
     await app.listen(appConfigs.port);
+    if (appConfigs.nodeEnv === NodeEnv.development) {
+        console.log(
+            `see docs on swagger: http://${appConfigs.host}:${appConfigs.port}/${appConfigs.swaggerRoute}`,
+        );
+    }
 }
 bootstrap();
