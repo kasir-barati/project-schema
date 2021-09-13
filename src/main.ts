@@ -1,6 +1,7 @@
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
+import { LoggerService } from '@nestjs/common';
 import * as cookieParser from 'cookie-parser';
 import { NestFactory } from '@nestjs/core';
 import * as helmet from 'helmet';
@@ -11,17 +12,21 @@ import { corsConfigsGenerator } from './configs/cors.config';
 import { csrf } from './common/middlewares/general/csrf.middleware';
 import { NodeEnv, webAppConfigs } from './configs/types/web.type';
 import { AppModule } from './app.module';
+import { morganMiddleware } from './common/middlewares/general/morgan.middleware';
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
     const { corsConfigs } = corsConfigsGenerator();
     const configService = app.get(ConfigService);
-    const nestWinston = app.get(WINSTON_MODULE_NEST_PROVIDER);
+    const nestWinston: LoggerService = app.get(
+        WINSTON_MODULE_NEST_PROVIDER,
+    );
     const appConfigs = configService.get<webAppConfigs>(
         'webAppConfigs',
     );
 
     app.useLogger(nestWinston);
+    app.use(morganMiddleware(nestWinston, appConfigs.nodeEnv));
     app.enableCors(corsConfigs);
     app.use(cookieParser());
     app.use(helmet());
