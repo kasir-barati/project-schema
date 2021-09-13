@@ -5,9 +5,9 @@ import { NestFactory } from '@nestjs/core';
 import * as helmet from 'helmet';
 import * as csurf from 'csurf';
 
-import { csrf as csrfErrorHandler } from './middlewares/errors/csrf.middleware';
+import { csrf as csrfErrorHandler } from './common/middlewares/errors/csrf.middleware';
 import { corsConfigsGenerator } from './configs/cors.config';
-import { csrf } from './middlewares/general/csrf.middleware';
+import { csrf } from './common/middlewares/general/csrf.middleware';
 import { webAppConfigs } from './configs/types/web.type';
 import { AppModule } from './app.module';
 
