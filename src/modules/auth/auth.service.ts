@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
 import { authConfigs } from '../../contracts/types/auth.type';
-import { DecodedAdmin, DecodedUser } from './types/decoded-jwt.type';
+import { JwtPayload } from './types/decoded-jwt.type';
 
 type User = any;
 
@@ -29,11 +29,11 @@ class AuthService {
     // }
     // async verifyContractor(
     //     token: string,
-    // ): Promise<{ decodedUser: DecodedUser }> {
+    // ): Promise<{ decodedUser: JwtPayload }> {
     //     const {
     //         userSecret,
     //     } = await this.configService.get<authConfigs>('authConfigs');
-    //     const decodedUser = this.jwtService.verify<DecodedUser>(
+    //     const decodedUser = this.jwtService.verify<JwtPayload>(
     //         token,
     //         {
     //             secret: userSecret,

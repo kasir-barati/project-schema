@@ -4,7 +4,7 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
 import { authConfigs } from '../../../contracts/types/auth.type';
-import { DecodedAdmin, DecodedUser } from '../types/decoded-jwt.type';
+import { JwtPayload } from '../types/decoded-jwt.type';
 
 @Injectable()
 // class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
@@ -23,9 +23,8 @@ class JwtStrategy extends PassportStrategy(Strategy) {
         });
     }
 
-    validate(
-        payload: DecodedAdmin | DecodedUser,
-    ): DecodedAdmin | DecodedUser {
+    validate(payload: JwtPayload): JwtPayload {
+        // check the user rule
         return payload;
     }
 }
