@@ -1,13 +1,14 @@
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
-import { LoggerService } from '@nestjs/common';
+import { LoggerService, ValidationPipe } from '@nestjs/common';
 import * as cookieParser from 'cookie-parser';
 import { NestFactory } from '@nestjs/core';
 import * as helmet from 'helmet';
 import * as csurf from 'csurf';
 
 import { csrf as csrfErrorHandler } from './common/middlewares/errors/csrf.middleware';
+import { HttpExceptionFilter } from './common/filters/exception.filter';
 import { corsConfigsGenerator } from './configs/cors.config';
 import { csrf } from './common/middlewares/general/csrf.middleware';
 import { NodeEnv, webAppConfigs } from './contracts/types/web.type';
@@ -67,6 +68,9 @@ async function bootstrap() {
             document,
         );
     }
+
+    app.useGlobalPipes(new ValidationPipe());
+    app.useGlobalFilters(new HttpExceptionFilter(nestWinston));
 
     // TODO: log the app connection info via winston
     await app.listen(appConfigs.port);
