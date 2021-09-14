@@ -6,6 +6,7 @@ import * as cookieParser from 'cookie-parser';
 import { NestFactory } from '@nestjs/core';
 import * as helmet from 'helmet';
 import * as csurf from 'csurf';
+import * as mongoSanitize from 'express-mongo-sanitize';
 
 import { csrf as csrfErrorHandler } from './common/middlewares/errors/csrf.middleware';
 import { HttpExceptionFilter } from './common/filters/exception.filter';
@@ -37,6 +38,7 @@ async function bootstrap() {
     app.enableCors(corsConfigs);
     app.use(cookieParser());
     app.use(helmet());
+    app.use(mongoSanitize());
     app.use(
         csurf({
             cookie: { sameSite: true },
